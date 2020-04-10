@@ -1,0 +1,121 @@
+---
+title: "Tutorial: rbind"
+date: "10/04/2020"
+output: html_document
+---
+
+<!--
+```{r cache=FALSE, include=FALSE}
+knitr::read_chunk('rbind_tutorial.R')
+```
+-->
+```{r setup, include=FALSE}
+colorize <- function(x, color) {
+  if (knitr::is_latex_output()) {
+    sprintf("\\textcolor{%s}{%s}", color, x)
+  } else if (knitr::is_html_output()) {
+    sprintf("<span style='color: %s;'>%s</span>", color, 
+      x)
+  } else x
+}
+```
+
+```{r include=FALSE}
+source("rbind_tutorial.R", echo = FALSE, keep.source = TRUE)
+```
+
+# rbind in R | 3 Examples (Vector, Data Frame & rbind.fill for Missing Columns)
+
+
+**Basic R Syntax:**
+```{r eval=FALSE}
+rbind(my_data, new_row)
+```
+
+The name of the _rbind_ R function stands for _row-bind_. The rbind function can be used to combine several vectors, matrices and/or data frames by rows. Above, you can find the basic code for rbind in R.
+
+In the following article, I’m going to provide you with 3 examples for the application of the rbind function in R. Let’s start right away.
+
+## Example 1: rbind Vector to Data Frame
+
+The easiest way of using rbind [in R](https://statisticsglobe.com/r-programming-language/) is the combination of a vector and a data frame. First, let’s create some example data frame…
+
+```{r eval=FALSE}
+x1 <- c(7, 4, 4, 9)                  # Column 1 of data frame
+x2 <- c(5, 2, 8, 9)                  # Column 2 of data frame
+x3 <- c(1, 2, 3, 4)                  # Column 3 of data frame
+data_1 <- data.frame(x1, x2, x3)     # Create example data frame
+```
+
+…and an example vector:
+
+```{r eval=FALSE}
+vector_1 <- c(9, 8, 7)               # Create example vector
+```
+
+Now, let’s rbind this vector to the data frame:
+
+```{r eval=TRUE, echo=TRUE}
+rbind(data_1, vector_1)              # rbind vector to data frame
+```
+
+The above table illustrates the output of the rbind function: 
+* The first four rows are identical to our original data frame data_1; 
+* the fifth row is identical to our vector vector_1.
+ 
+## Example 2: rbind Two Data Frames in R
+
+The rbind command can also be applied to two data frames. Let’s create a second data frame and row bind it to data_1 (the data frame that we created above):
+
+```{r eval=FALSE}
+x1 <- c(7, 1)                        # Column 1 of data frame 2
+x2 <- c(4, 1)                        # Column 2 of data frame 2
+x3 <- c(4, 3)                        # Column 3 of data frame 2
+data_2 <- data.frame(x1, x2, x3)     # Create second data frame
+```
+
+We can rbind these two data frames with the same R code as before:
+
+```{r eval=TRUE, echo=TRUE}
+rbind(data_1, data_2)                # rbind two data frames in R
+```
+
+As in Example 1, the upper part of the rbind output consists of data_1 and the lower part of the rbind output consists of data_2.
+
+**Note:** Both data frames have the same column names. When the columns of the two data frames differ, it gets a bit more complicated. In the next example, I’m going to show you how to rbind data frames with different column names.
+
+## Example 3: rbind fill – Row Bind with Missing Columns
+
+The binding of data frames with different columns / column names is a bit more complicated with the rbind function. R usually returns the error “Error in match.names(clabs, names(xi))”, if you try to use the rbind function for data frames with different columns.
+
+For that reason, the [plyr package](https://cran.r-project.org/web/packages/plyr/plyr.pdf) (be careful: it’s called plyr; not dplyr) provides the rbind.fill R function as add-on to the rbind base function. In the following example, I’ll show you how to use the plyr rbind.fill [function in R](https://statisticsglobe.com/r-functions-list/).
+
+Consider the following two example data frames:
+
+```{r eval=TRUE, echo=TRUE}
+col1 <- c(5, 1, 1, 8)                # Column 1 of data frame 1 plyr example
+col2 <- c(9, 7, 5, 1)                # Column 2 of data frame 1 plyr example
+col3 <- c(1, 1, 2, 2)                # Column 3 of data frame 1 plyr example
+ 
+data_plyr1 <- data.frame(col1, col2, col3) # Create plyr data frame 1
+```
+```{r eval=TRUE, echo=TRUE}
+col3 <- c(5, 1, 1, 8)                # Column 1 of data frame 2 plyr example
+col4 <- c(9, 7, 5, 1)                # Column 2 of data frame 2 plyr example
+ 
+data_plyr2 <- data.frame(col3, col4) # Create plyr data frame 2
+```
+
+To apply rbind.fill in R, we need to load the [plyr package](https://statisticsglobe.com/plyr-r-package) first:
+
+```{r}
+library("plyr") 
+```
+
+Now, we can apply the rbind.fill R command to our two example data frames:
+
+```{r eval=TRUE, echo=TRUE}
+rbind.fill(data_plyr1, data_plyr2)   # Apply the rbind.fill plyr function
+```
+
+The above table makes it clear how rbind fill works: The function creates a column for each column name that appears either in the first or in the second data matrix. If a column exists in both data frames, it is row binded as usual. However, if a column is missing in one of the two data frames, the empty cells are `r colorize("replaced by NA", "blue")`.

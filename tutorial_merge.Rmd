@@ -1,0 +1,98 @@
+---
+title: "Tutorial: merge"
+date: "10/04/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+colorize <- function(x, color) {
+  if (knitr::is_latex_output()) {
+    sprintf("\\textcolor{%s}{%s}", color, x)
+  } else if (knitr::is_html_output()) {
+    sprintf("<span style='color: %s;'>%s</span>", color, 
+      x)
+  } else x
+}
+```
+
+```{r include=FALSE}
+source("merge_tutorial.R", echo = FALSE, keep.source = TRUE)
+```
+
+# Merge Data Frames by Column Names in R (3 Examples)
+
+In this R post you’ll learn how to **merge data frames by column names**. 
+
+The tutorial consists of three examples for the merging of different data sets. More precisely, the article consists of the following contents:
+
+* Example 1: Basic Application of merge Function in R
+* Example 2: Keep Data of Unmatched Rows
+* Example 3: Merge Multiple Data Frames
+* Video & Further Resources
+
+You’re here for the answer, so let’s get straight to the examples…
+
+## Example 1: Basic Application of merge Function in R
+
+First, we need to create some data frames that we can use in the example later on. Consider the following R code:
+
+```{r eval=FALSE}
+data1 <- data.frame(id = 1:6,                                  # Create first example data frame
+                    x1 = c(5, 1, 4, 9, 1, 2),
+                    x2 = c("A", "Y", "G", "F", "G", "Y"))
+ 
+data2 <- data.frame(id = 4:9,                                  # Create second example data frame
+                    y1 = c(3, 3, 4, 1, 2, 9),
+                    y2 = c("a", "x", "a", "x", "a", "x"))
+```
+
+Each of our two example data frames contains three columns. Both data frames have an id column (e.g. an identification number for a household).
+
+We can now use the merge() R function to combine our two data frames by the id column as follows:
+
+```{r eval=TRUE, echo=TRUE}
+merge(data1, data2, by = "id")                                 # Merge data frames by columns names
+```
+
+The above table illustrates the merging process of the two data frames. As you can see based on the table, the two data frames have the id values 4, 5, and 6 in common. The ids 1, 2, 3, 7, 8, and 9 were therefore not kept in the joined data frame. In statistical research literature, this type of merging is often called `r colorize("inner join", "blue")`.
+
+Do you want to keep the rows of your data frames even when they are not matched? Then keep reading, this is what I’m going to show you next…
+
+
+## Example 2: Keep Data of Unmatched Rows
+
+The merge function provides the options all.x and all.y. These two options can be used to retain certain rows of your input data tables, even when no match is found for the merging.
+
+With the following R codes, we can keep all rows of our first input data frame (i.e. data1)…
+
+```{r eval=TRUE, echo=TRUE}
+merge(data1, data2, by = "id", all.x = TRUE)                   # Keep all rows of x-data
+```
+
+…of our second input data frame (i.e. data2)…
+
+```{r eval=TRUE, echo=TRUE}
+merge(data1, data2, by = "id", all.y = TRUE)                   # Keep all rows of y-data
+```
+
+…or we can even keep all rows of both data files:
+
+```{r eval=TRUE, echo=TRUE}
+merge(data1, data2, by = "id", all.x = TRUE, all.y = TRUE)     # Keep all rows of both data frames
+```
+
+## Example 3: Merge Multiple Data Frames
+
+
+
+
+
+## Video, Further Resources & Summary
+
+In case you need further explanations for the application of the merge function in R, you could have a look at the following video of my YouTube channel. In the video, I’m explaining the examples of this tutorial in a live programming session in RStudio.
+
+[Youtube Video](https://youtu.be/rlvWJdjYo1g)
+
+Please also note that the merge command is only one of several functions, which allow for combining several data sources. In the [URL](https://statisticsglobe.com/r-merging-data-frames-by-column-names-merge-function), you can find a list of tutorials that explain the merge function in more complex settings as well as the usage of other merging functions such as rbind, cbind, or the different join functions of the [dplyr package](https://datacarpentry.org/R-genomics/04-dplyr.html). Check out the list below to see if one of these tutorials is fitting your data situation more adequately:
+
+**In summary:** This tutorial explained how to merge 2 or 3 data frames by a column vector in the R programming language. 
