@@ -81,10 +81,39 @@ merge(data1, data2, by = "id", all.y = TRUE)                   # Keep all rows o
 merge(data1, data2, by = "id", all.x = TRUE, all.y = TRUE)     # Keep all rows of both data frames
 ```
 
+**Note:** Observations for which no match is found are set to `r colorize("NA", "blue")` in the corresponding column(s).
+
+The three joining types that I have shown in Example 2 are often named as left join, right join, and full join. You can learn more about the different types of SQL joins [here](https://stackoverflow.com/questions/5706437/whats-the-difference-between-inner-join-left-join-right-join-and-full-join).
+
 ## Example 3: Merge Multiple Data Frames
 
+So far, we have only merged two data tables. In reality, however, we will often have to merge multiple data frames to a single data matrix.
 
+Fortunately, in the R programming language this can be achieved easily with a step-by-step approach. Let’s see how this looks in practice.
 
+First, we need to create a third example data set:
+
+```{r eval=FALSE}
+data3 <- data.frame(id = 5:6,                                  # Create third example data frame
+                    z1 = c(3, 2),
+                    z2 = c("K", "b"))
+```
+
+Now, we can simply merge our three data frames one after each other. First, I’m going to create a combined data set of data1 and data2…
+
+```{r eval=FALSE}
+data12 <- merge(data1, data2, by = "id")                       # Merge data 1 & 2 and store
+```
+
+…and then I’m going to join the third example data set to my previously merged data set, leading to a single data set containing the rows with all shared ids of our three data matrices without losing data:
+
+```{r eval=TRUE, echo=TRUE}
+merge(data12, data3, by = "id")                                # Merge multiple data frames
+```
+
+In the previous R syntax, I applied an inner join, but of cause you could also use a right, left, or full join in this step-by-step approach.
+
+Also note that there is a very smooth way to merge multiple data frames simultaneously by combining these data frames in a list. You can learn more about this approach [in this tutorial](https://statisticsglobe.com/merge-multiple-data-frames-of-list-in-r).
 
 
 ## Video, Further Resources & Summary
